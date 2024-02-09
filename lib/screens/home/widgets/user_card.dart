@@ -1,10 +1,15 @@
+import 'package:crud_app/providers/userProvider.dart';
 import 'package:crud_app/schemas/user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key, required this.user});
+  const UserCard({
+    super.key,
+    required this.user,
+  });
   final UserSchema user;
 
   @override
@@ -98,10 +103,11 @@ class DeleteButton extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                     duration: const Duration(seconds: 3),
-                    backgroundColor: const Color.fromARGB(255, 35, 108, 233),
+                    backgroundColor: Color.fromARGB(255, 235, 50, 50),
                     content: Text(
                         'User Deleted: ${newUser[0]["first_name"]} ${newUser[0]["last_name"]}')),
               );
+              context.read<UserProvider>().getAllUsers();
             } catch (err) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -109,7 +115,7 @@ class DeleteButton extends StatelessWidget {
                     duration: Duration(seconds: 3),
                     content: Text('Could not delete user !!')),
               );
-            } 
+            } finally {}
           },
           child: const Text(
             "Delete",

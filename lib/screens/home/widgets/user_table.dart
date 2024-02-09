@@ -1,22 +1,23 @@
+import 'package:crud_app/providers/userProvider.dart';
 import 'package:crud_app/schemas/user.dart';
 import 'package:crud_app/screens/home/widgets/user_card.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 class UserTable extends StatefulWidget {
-  UserTable({super.key});
+  const UserTable({super.key});
 
   @override
   State<UserTable> createState() => _UserTableState();
 }
 
 class _UserTableState extends State<UserTable> {
-  final _usersFuture = Supabase.instance.client.from("users").select();
-
   @override
   Widget build(BuildContext context) {
+    Future usersFuture = context.watch<UserProvider>().users;
+
     return FutureBuilder(
-      future: _usersFuture,
+      future: usersFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());

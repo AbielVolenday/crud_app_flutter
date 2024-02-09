@@ -1,6 +1,8 @@
+import 'package:crud_app/providers/userProvider.dart';
 import 'package:crud_app/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 main() async {
@@ -20,16 +22,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: AppRouter,
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 59, 164, 235)),
-        useMaterial3: true,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => UserProvider(),
+        )
+      ],
+      child: MaterialApp.router(
+        routerConfig: AppRouter,
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromARGB(255, 59, 164, 235)),
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(),
       ),
-      darkTheme: ThemeData.dark(),
     );
   }
 }
