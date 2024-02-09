@@ -1,6 +1,7 @@
 import 'package:crud_app/schemas/user.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class UserCard extends StatelessWidget {
   const UserCard({super.key, required this.user});
@@ -17,15 +18,17 @@ class UserCard extends StatelessWidget {
         ContentRow(name: "Last Name :", value: user.last_name),
         ContentRow(name: "Birthday :", value: user.birthday.toString()),
         ContentRow(name: "Age :", value: user.age.toString()),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
             children: [
-              UpdateButton(),
-              SizedBox(
+              UpdateButton(id: user.id.toString()),
+              const SizedBox(
                 width: 10,
               ),
-              DeleteButton(),
+              DeleteButton(
+                id: user.id.toString(),
+              ),
             ],
           ),
         ),
@@ -68,8 +71,10 @@ class ContentRow extends StatelessWidget {
 }
 
 class DeleteButton extends StatelessWidget {
+  final String id;
   const DeleteButton({
     super.key,
+    required this.id,
   });
 
   @override
@@ -82,7 +87,30 @@ class DeleteButton extends StatelessWidget {
       ),
       child: TextButton(
           style: TextButton.styleFrom(foregroundColor: Colors.white),
-          onPressed: () {},
+          onPressed: () async {
+            try {
+              final newUser = await Supabase.instance.client
+                  .from('users')
+                  .delete()
+                  .eq("id", int.parse(id))
+                  .select();
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    duration: const Duration(seconds: 3),
+                    backgroundColor: const Color.fromARGB(255, 35, 108, 233),
+                    content: Text(
+                        'User Deleted: ${newUser[0]["first_name"]} ${newUser[0]["last_name"]}')),
+              );
+            } catch (err) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    backgroundColor: Color.fromARGB(255, 35, 108, 233),
+                    duration: Duration(seconds: 3),
+                    content: Text('Could not delete user !!')),
+              );
+            } 
+          },
           child: const Text(
             "Delete",
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -92,8 +120,11 @@ class DeleteButton extends StatelessWidget {
 }
 
 class UpdateButton extends StatelessWidget {
+  final String id;
+
   const UpdateButton({
     super.key,
+    required this.id,
   });
 
   @override
@@ -107,7 +138,8 @@ class UpdateButton extends StatelessWidget {
       child: TextButton(
           style: TextButton.styleFrom(foregroundColor: Colors.white),
           onPressed: () {
-            context.go("/updateUser/123");
+            context
+                .goNamed("updateUser", pathParameters: {"id": id.toString()});
           },
           child: const Text(
             "Update",

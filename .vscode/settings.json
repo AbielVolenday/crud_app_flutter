@@ -1,0 +1,19 @@
+{
+    "cSpell.words": [
+        "ARGB",
+        "Supabase"
+    ],
+"editor.renderLineHighlight": "all",
+"workbench.colorCustomizations": {
+    "editor.lineHighlightBackground": "#414141",
+    // "editor.lineHighlightBorder": "#c1c1f5"
+},
+
+
+
+
+}
+
+
+
+

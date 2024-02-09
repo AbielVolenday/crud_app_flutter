@@ -24,16 +24,35 @@ class HomeScreen extends StatelessWidget {
           child: UserTable(),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.go('/createUser');
-        },
-        backgroundColor: const Color.fromARGB(255, 79, 169, 241),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          
-        ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: "refreshUsers",
+            onPressed: () {},
+            backgroundColor: const Color.fromARGB(255, 79, 169, 241),
+            child: const Icon(
+              Icons.restore,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          FloatingActionButton(
+            heroTag: "addUser",
+            onPressed: () {
+              context.goNamed(
+                'createUser',
+              );
+            },
+            backgroundColor: const Color.fromARGB(255, 79, 169, 241),
+            child: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
