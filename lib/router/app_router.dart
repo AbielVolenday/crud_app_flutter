@@ -13,6 +13,7 @@ final GoRouter AppRouter = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
+          name: "createUser",
           path: 'createUser',
           builder: (BuildContext context, GoRouterState state) {
             return const CreateUserScreen();
@@ -20,8 +21,11 @@ final GoRouter AppRouter = GoRouter(
         ),
         GoRoute(
             path: 'updateUser/:id',
+            name: "updateUser",
             builder: (BuildContext context, GoRouterState state) {
-              return const UpdateUserScreen();
+              return UpdateUserScreen(
+                id: state.pathParameters['id'],
+              );
             }),
       ],
     ),
